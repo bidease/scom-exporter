@@ -29,3 +29,7 @@ var baremetalHostPrice = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 var baremetalHostDRACEnabled = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 	Name: "serverscom_baremetal_host_drac_enabled",
 }, []string{"host"})
+
+var baremetalHostOSReinstallation = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	Name: "serverscom_baremetal_host_os_reinstallation",
+}, []string{"host"})

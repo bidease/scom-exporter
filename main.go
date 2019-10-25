@@ -26,6 +26,7 @@ func init() {
 		baremetalHostBillingPeriodTraffic,
 		baremetalHostPrice,
 		baremetalHostDRACEnabled,
+		baremetalHostOSReinstallation,
 	)
 }
 

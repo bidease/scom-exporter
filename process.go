@@ -49,6 +49,12 @@ func getHostMetrics(api *scomportal.API) {
 			}
 		}
 
+		if hostDetail.Data.OSReinstallation {
+			baremetalHostOSReinstallation.WithLabelValues(host.Title).Set(1)
+		} else {
+			baremetalHostOSReinstallation.WithLabelValues(host.Title).Set(0)
+		}
+
 		traffic, err := api.GetBaremetalHostTraffic(host.ID)
 		if err != nil {
 			log.Println(err)
