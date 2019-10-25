@@ -27,34 +27,42 @@ func getBaremetalBalance(api *scomportal.API) {
 	baremetalEstimatedBalance.Set(estimatedBalance)
 }
 
-func getTrafficHost(api *scomportal.API) {
+func getHostMetrics(api *scomportal.API) {
 	hosts, err := api.GetBaremetalHosts()
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	for _, host := range hosts.Data {
+		hostDetail, err := api.GetBaremetalHost(host.ID)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+
+		if hostDetail.Data.HasDRAC {
+			switch hostDetail.Data.TemporaryDracAccess {
+			case "enabled":
+				baremetalHostDRACEnabled.WithLabelValues(host.Title).Set(1)
+			case "disabled":
+				baremetalHostDRACEnabled.WithLabelValues(host.Title).Set(0)
+			}
+		}
+
 		traffic, err := api.GetBaremetalHostTraffic(host.ID)
 		if err != nil {
 			log.Println(err)
+			continue
 		}
 
 		usageTraffic, _ := strconv.ParseFloat(traffic.Data.Commit.UsageQuantity, 64)
 		baremetalHostUsageTraffic.WithLabelValues(host.Title).Set(usageTraffic)
 		baremetalHostBillingPeriodTraffic.WithLabelValues(host.Title).Set(traffic.Data.Commit.CommitValueForBillingPeriod)
-	}
-}
 
-func getBaremetalHostPrice(api *scomportal.API) {
-	hosts, err := api.GetBaremetalHosts()
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	for _, host := range hosts.Data {
 		services, err := api.GetServices(host.ID)
 		if err != nil {
 			log.Println(err)
+			continue
 		}
 
 		var price float64

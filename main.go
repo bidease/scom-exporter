@@ -25,6 +25,7 @@ func init() {
 		baremetalHostUsageTraffic,
 		baremetalHostBillingPeriodTraffic,
 		baremetalHostPrice,
+		baremetalHostDRACEnabled,
 	)
 }
 
@@ -41,8 +42,7 @@ func getMetrics() {
 	for {
 		go getBaremetalHostsTotal(api)
 		go getBaremetalBalance(api)
-		go getTrafficHost(api)
-		go getBaremetalHostPrice(api)
+		go getHostMetrics(api)
 
 		time.Sleep(time.Duration(time.Second * time.Duration(conf.ScrapeInterval)))
 	}

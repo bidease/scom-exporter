@@ -25,3 +25,7 @@ var baremetalHostBillingPeriodTraffic = prometheus.NewGaugeVec(prometheus.GaugeO
 var baremetalHostPrice = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 	Name: "serverscom_baremetal_host_price",
 }, []string{"host"})
+
+var baremetalHostDRACEnabled = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+	Name: "serverscom_baremetal_host_drac_enabled",
+}, []string{"host"})
